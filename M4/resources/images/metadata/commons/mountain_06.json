@@ -1,0 +1,132 @@
+{
+  "batchcomplete": "",
+  "query": {
+    "pages": {
+      "8794037": {
+        "pageid": 8794037,
+        "ns": 6,
+        "title": "File:Oxbow Bend outlook in the Grand Teton National Park.jpg",
+        "imagerepository": "local",
+        "imageinfo": [
+          {
+            "timestamp": "2009-12-20T16:05:12Z",
+            "size": 1825437,
+            "width": 1890,
+            "height": 1343,
+            "thumburl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6b/Oxbow_Bend_outlook_in_the_Grand_Teton_National_Park.jpg/1280px-Oxbow_Bend_outlook_in_the_Grand_Teton_National_Park.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+            "thumbwidth": 1280,
+            "thumbheight": 910,
+            "responsiveUrls": {
+              "2": "https://upload.wikimedia.org/wikipedia/commons/6/6b/Oxbow_Bend_outlook_in_the_Grand_Teton_National_Park.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled"
+            },
+            "thumbattribs": {
+              "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6b/Oxbow_Bend_outlook_in_the_Grand_Teton_National_Park.jpg/1280px-Oxbow_Bend_outlook_in_the_Grand_Teton_National_Park.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+              "decoding": "async",
+              "loading": "lazy",
+              "width": 1280,
+              "height": 910,
+              "srcset": "https://upload.wikimedia.org/wikipedia/commons/6/6b/Oxbow_Bend_outlook_in_the_Grand_Teton_National_Park.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled 2x"
+            },
+            "url": "https://upload.wikimedia.org/wikipedia/commons/6/6b/Oxbow_Bend_outlook_in_the_Grand_Teton_National_Park.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+            "descriptionurl": "https://commons.wikimedia.org/wiki/File:Oxbow_Bend_outlook_in_the_Grand_Teton_National_Park.jpg",
+            "descriptionshorturl": "https://commons.wikimedia.org/w/index.php?curid=8794037",
+            "sha1": "6d7dae567e1f75cc5e5f8c7512b2f05051796dc7",
+            "extmetadata": {
+              "DateTime": {
+                "value": "2009-12-20 16:05:12",
+                "source": "mediawiki-metadata",
+                "hidden": ""
+              },
+              "ObjectName": {
+                "value": "Oxbow Bend outlook in the Grand Teton National Park",
+                "source": "mediawiki-metadata"
+              },
+              "CommonsMetadataExtension": {
+                "value": 1.2,
+                "source": "extension",
+                "hidden": ""
+              },
+              "Categories": {
+                "value": "Mount Moran|1980 in Wyoming|Taken with Olympus OM-1|Self-published work|Photographs taken on Kodachrome 25 film|Featured pictures on Wikipedia, Hebrew|Featured pictures on Wikipedia, Persian|Landscapes of Grand Teton National Park|July 1980 in the United States|Files with coordinates missing SDC location of creation|Featured pictures of Grand Teton National Park|Featured pictures by Michael Gäbler|Featured pictures taken on film|Assessment tagged pages marked as POTY candidates|Photographs by Michael Gäbler|Snake River seen from Oxbow Bend (Grand Teton)|Skillet Glacier",
+                "source": "commons-categories",
+                "hidden": ""
+              },
+              "Assessments": {
+                "value": "featured|potd|poty",
+                "source": "commons-categories",
+                "hidden": ""
+              },
+              "GPSLatitude": {
+                "value": "43.865781",
+                "source": "commons-desc-page"
+              },
+              "GPSLongitude": {
+                "value": "-110.547636",
+                "source": "commons-desc-page"
+              },
+              "GPSMapDatum": {
+                "value": "WGS-84",
+                "source": "commons-desc-page",
+                "hidden": ""
+              },
+              "ImageDescription": {
+                "value": "Oxbow Bend outlook in the <a href=\"https://en.wikipedia.org/wiki/Grand_Teton_National_Park\" class=\"extiw\" title=\"en:Grand Teton National Park\">Grand Teton National Park</a>. View over the <a href=\"https://en.wikipedia.org/wiki/Snake_River\" class=\"extiw\" title=\"en:Snake River\">Snake River</a> to the <a href=\"https://en.wikipedia.org/wiki/Mount_Moran\" class=\"extiw\" title=\"en:Mount Moran\">Mount Moran</a> with the <a href=\"https://en.wikipedia.org/wiki/Skillet_Glacier\" class=\"extiw\" title=\"en:Skillet Glacier\">Skillet Glacier</a> (12,605 ft/3,842 m), <a href=\"https://en.wikipedia.org/wiki/Bivouac_Peak\" class=\"extiw\" title=\"en:Bivouac Peak\">Bivouac Peak</a> (10,825 ft/3,299 m) and <a href=\"https://en.wikipedia.org/wiki/Eagles_Rest_Peak\" class=\"extiw\" title=\"en:Eagles Rest Peak\">Eagles Rest Peak</a> (11,258 ft/3,431 m) in the <a href=\"https://en.wikipedia.org/wiki/Teton_Range\" class=\"extiw\" title=\"en:Teton Range\">Teton Range</a>, <a href=\"https://en.wikipedia.org/wiki/Wyoming\" class=\"extiw\" title=\"en:Wyoming\">Wyoming</a>, <a href=\"https://en.wikipedia.org/wiki/United_States\" class=\"extiw\" title=\"en:United States\">United States</a>.",
+                "source": "commons-desc-page"
+              },
+              "DateTimeOriginal": {
+                "value": "1980-07",
+                "source": "commons-desc-page"
+              },
+              "Credit": {
+                "value": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+                "source": "commons-desc-page"
+              },
+              "Artist": {
+                "value": "<a href=\"//commons.wikimedia.org/wiki/User:Michael_G%C3%A4bler\" title=\"User:Michael Gäbler\">Michael Gäbler</a>",
+                "source": "commons-desc-page"
+              },
+              "LicenseShortName": {
+                "value": "CC BY 3.0",
+                "source": "commons-desc-page",
+                "hidden": ""
+              },
+              "UsageTerms": {
+                "value": "Creative Commons Attribution 3.0",
+                "source": "commons-desc-page"
+              },
+              "AttributionRequired": {
+                "value": "true",
+                "source": "commons-desc-page",
+                "hidden": ""
+              },
+              "Attribution": {
+                "value": "<a href=\"//commons.wikimedia.org/wiki/User:Michael_G%C3%A4bler\" title=\"User:Michael Gäbler\">Michael Gäbler</a>",
+                "source": "commons-desc-page",
+                "hidden": ""
+              },
+              "LicenseUrl": {
+                "value": "https://creativecommons.org/licenses/by/3.0",
+                "source": "commons-desc-page"
+              },
+              "Copyrighted": {
+                "value": "True",
+                "source": "commons-desc-page",
+                "hidden": ""
+              },
+              "Restrictions": {
+                "value": "",
+                "source": "commons-desc-page",
+                "hidden": ""
+              },
+              "License": {
+                "value": "cc-by-3.0",
+                "source": "commons-templates",
+                "hidden": ""
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

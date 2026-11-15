@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "upstream_repository": "https://github.com/naoto0804/pytorch-AdaIN",
+  "upstream_ref": "v0.0.0",
+  "upstream_short_commit": "324eede",
+  "retrieved_at": "2026-11-15T09:05:37.080Z",
+  "checkpoints": {
+    "encoder": {
+      "path": "resources/weights/vgg_normalized.pth",
+      "sha256": "804ca2835ecf7539f0cd2a7ac3c18ce81e6f8468969ae7117ac0c148d286bb4a",
+      "bytes": 80102481,
+      "source_url": "https://github.com/naoto0804/pytorch-AdaIN/releases/download/v0.0.0/vgg_normalised.pth"
+    },
+    "decoder": {
+      "path": "resources/weights/decoder.pth",
+      "sha256": "379ca41d59f3a37eed3599bbbc2560c19da5c458870a5ffd3a9dd41aa88f9472",
+      "bytes": 14023458,
+      "source_url": "https://github.com/naoto0804/pytorch-AdaIN/releases/download/v0.0.0/decoder.pth"
+    }
+  },
+  "references": [
+    {
+      "path": "resources/upstream/adain/net.py",
+      "sha256": "2932117288166139afd648a4db790d717c211a10328c8dc9df3380b958a41c17",
+      "bytes": 5274,
+      "source_url": "https://raw.githubusercontent.com/naoto0804/pytorch-AdaIN/v0.0.0/net.py"
+    },
+    {
+      "path": "resources/upstream/adain/function.py",
+      "sha256": "aa8bf84efb80ba43724d075a2d237387ed8e8baed342b95b55a7a0d5f8aa09ea",
+      "bytes": 2405,
+      "source_url": "https://raw.githubusercontent.com/naoto0804/pytorch-AdaIN/v0.0.0/function.py"
+    },
+    {
+      "path": "resources/upstream/adain/LICENSE",
+      "sha256": "cac60b351360e641823e739fa9701bc22dc0547d300d1c54c4a0c040fc6e6e2b",
+      "bytes": 1068,
+      "source_url": "https://raw.githubusercontent.com/naoto0804/pytorch-AdaIN/v0.0.0/LICENSE"
+    }
+  ],
+  "font": {
+    "path": "resources/fonts/NotoSansCJKsc-Regular.otf",
+    "sha256": "2c76254f6fc379fddfce0a7e84fb5385bb135d3e399294f6eeb6680d0365b74b",
+    "bytes": 16437364,
+    "source_url": "https://raw.githubusercontent.com/notofonts/noto-cjk/main/Sans/OTF/SimplifiedChinese/NotoSansCJKsc-Regular.otf"
+  },
+  "font_license": {
+    "path": "resources/fonts/OFL.txt",
+    "sha256": "6a73f9541c2de74158c0e7cf6b0a58ef774f5a780bf191f2d7ec9cc53efe2bf2",
+    "bytes": 4301,
+    "source_url": "https://raw.githubusercontent.com/notofonts/noto-cjk/main/Sans/LICENSE"
+  }
+}

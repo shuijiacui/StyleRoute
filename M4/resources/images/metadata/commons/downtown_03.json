@@ -1,0 +1,132 @@
+{
+  "batchcomplete": "",
+  "query": {
+    "pages": {
+      "36141174": {
+        "pageid": 36141174,
+        "ns": 6,
+        "title": "File:Prague skyline at dawn.jpg",
+        "imagerepository": "local",
+        "imageinfo": [
+          {
+            "timestamp": "2016-12-26T15:04:06Z",
+            "size": 2182577,
+            "width": 4326,
+            "height": 2618,
+            "thumburl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2c/Prague_skyline_at_dawn.jpg/1280px-Prague_skyline_at_dawn.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+            "thumbwidth": 1280,
+            "thumbheight": 775,
+            "responsiveUrls": {
+              "2": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2c/Prague_skyline_at_dawn.jpg/3840px-Prague_skyline_at_dawn.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+            },
+            "thumbattribs": {
+              "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2c/Prague_skyline_at_dawn.jpg/1280px-Prague_skyline_at_dawn.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+              "decoding": "async",
+              "loading": "lazy",
+              "width": 1280,
+              "height": 775,
+              "srcset": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2c/Prague_skyline_at_dawn.jpg/3840px-Prague_skyline_at_dawn.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail 2x"
+            },
+            "url": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Prague_skyline_at_dawn.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+            "descriptionurl": "https://commons.wikimedia.org/wiki/File:Prague_skyline_at_dawn.jpg",
+            "descriptionshorturl": "https://commons.wikimedia.org/w/index.php?curid=36141174",
+            "sha1": "bafd496b941ebc4b30da0e5a726695a7d49de252",
+            "extmetadata": {
+              "DateTime": {
+                "value": "2016-12-26 15:04:06",
+                "source": "mediawiki-metadata",
+                "hidden": ""
+              },
+              "ObjectName": {
+                "value": "Prague skyline at dawn",
+                "source": "mediawiki-metadata"
+              },
+              "CommonsMetadataExtension": {
+                "value": 1.2,
+                "source": "extension",
+                "hidden": ""
+              },
+              "Categories": {
+                "value": "Dawn|Cityscapes|Self-published work|Featured photos of PetarM|Featured pictures of Prague|Featured pictures of cityscapes|Night in Prague|Files with coordinates missing SDC location of creation|Photographic silhouettes of buildings",
+                "source": "commons-categories",
+                "hidden": ""
+              },
+              "Assessments": {
+                "value": "featured|potd",
+                "source": "commons-categories",
+                "hidden": ""
+              },
+              "GPSLatitude": {
+                "value": "50.086389",
+                "source": "commons-desc-page"
+              },
+              "GPSLongitude": {
+                "value": "14.411667",
+                "source": "commons-desc-page"
+              },
+              "GPSMapDatum": {
+                "value": "WGS-84",
+                "source": "commons-desc-page",
+                "hidden": ""
+              },
+              "ImageDescription": {
+                "value": "Prague skyline at dawn. View from Charles bridge to the East.",
+                "source": "commons-desc-page"
+              },
+              "DateTimeOriginal": {
+                "value": "2014-08-09 05:27:23",
+                "source": "commons-desc-page"
+              },
+              "Credit": {
+                "value": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+                "source": "commons-desc-page"
+              },
+              "Artist": {
+                "value": "<a href=\"//commons.wikimedia.org/wiki/User:PetarM\" title=\"User:PetarM\">Petar Milošević</a>",
+                "source": "commons-desc-page"
+              },
+              "Permission": {
+                "value": "<div style=\"clear:both; border: var(--border-style-base, 1px solid #999); margin: 1em; padding: 1em; background-color: var(--background-color-progressive-subtle, #F0F8FF); color: inherit;\">\n<p><span typeof=\"mw:File\"><a href=\"//commons.wikimedia.org/wiki/File:Right-pointing_hand_in_green_octagon.svg\" class=\"mw-file-description\"><img src=\"https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e7/Right-pointing_hand_in_green_octagon.svg/40px-Right-pointing_hand_in_green_octagon.svg.png?utm_source=commons.wikimedia.org&amp;utm_campaign=parser&amp;utm_content=thumbnail\" decoding=\"async\" loading=\"lazy\" width=\"38\" height=\"38\" class=\"mw-file-element\" srcset=\"https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e7/Right-pointing_hand_in_green_octagon.svg/120px-Right-pointing_hand_in_green_octagon.svg.png?utm_source=commons.wikimedia.org&amp;utm_campaign=parser&amp;utm_content=thumbnail 2x\" data-file-width=\"64\" data-file-height=\"64\"></a></span> You can use this picture according to license. For use outside of Wikipedia I would appreciate it if you let me know by sending e-mail to <b><a rel=\"nofollow\" class=\"external text\" href=\"mailto:petarmslo@gmail.com\">petarmslo@gmail.com</a></b> <span typeof=\"mw:File\"><a href=\"mailto:petarmslo@gmail.com\" rel=\"nofollow\"><img src=\"https://thumb.wikimedia.org/wikipedia/commons/thumb/3/36/Nuvola_apps_email.png/40px-Nuvola_apps_email.png?utm_source=commons.wikimedia.org&amp;utm_campaign=parser&amp;utm_content=thumbnail\" decoding=\"async\" loading=\"lazy\" width=\"24\" height=\"24\" class=\"mw-file-element\" srcset=\"https://thumb.wikimedia.org/wikipedia/commons/thumb/3/36/Nuvola_apps_email.png/60px-Nuvola_apps_email.png?utm_source=commons.wikimedia.org&amp;utm_campaign=parser&amp;utm_content=thumbnail 2x\" data-file-width=\"128\" data-file-height=\"128\"></a></span>.  Thank you in advance.\n</p>\n<div align=\"right\"><i><a href=\"//commons.wikimedia.org/wiki/User:PetarM\" title=\"User:PetarM\">Petar Milošević</a> <small> (author)</small></i></div></div>",
+                "source": "commons-desc-page",
+                "hidden": ""
+              },
+              "LicenseShortName": {
+                "value": "CC BY-SA 4.0",
+                "source": "commons-desc-page",
+                "hidden": ""
+              },
+              "UsageTerms": {
+                "value": "Creative Commons Attribution-Share Alike 4.0",
+                "source": "commons-desc-page"
+              },
+              "AttributionRequired": {
+                "value": "true",
+                "source": "commons-desc-page",
+                "hidden": ""
+              },
+              "LicenseUrl": {
+                "value": "https://creativecommons.org/licenses/by-sa/4.0",
+                "source": "commons-desc-page"
+              },
+              "Copyrighted": {
+                "value": "True",
+                "source": "commons-desc-page",
+                "hidden": ""
+              },
+              "Restrictions": {
+                "value": "",
+                "source": "commons-desc-page",
+                "hidden": ""
+              },
+              "License": {
+                "value": "cc-by-sa-4.0",
+                "source": "commons-templates",
+                "hidden": ""
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,180 +1,149 @@
-# M4 · 数据、AdaIN 生成与明信片应用
+# 山海来信 · M4 风格化明信片
 
-[返回项目说明](../README.md) · [M5 区域模块](../M5/README.md) · [M6 搜索与实验](../M6/README.md)
+本项目已实现 M4 可独立完成的生成、空间强度融合、应用、中文 PNG 与性能测量。采用真实 AdaIN 预训练权重，不重新训练网络。
 
-**你的任务：把“内容图、风格图和区域强度”变成能生成、能预览、能下载、能复现的艺术明信片。**
+本目录对应 **StyleRoute/M4**。M5/M6 请先阅读 [交接总览](docs/交接总览.md)、[M5交接](docs/给M5的交接文档.md)、[M6交接](docs/给M6的交接文档.md)。当前命令从 `M4/` 目录执行，源码使用 `src.*` 导入；原仓库的待实现约定保存在 [归档说明](docs/M4原仓库开发约定.md)。
 
-本文件是最终三人 pre 方案中的 M4 职责，所有代码和命令均为待实施约定。M5 负责划分区域，M6 负责评分和搜索，你负责生成与接入，不需要独自写全项目。
+## 目录怎么找
 
-## 1. 必交内容与文件
-
-下表为后续代码组织建议，本次初始化只创建 README。
-
-| 待实现文件 | 做什么 | 应交付的结果 |
-|---|---|---|
-| `M4/data/prepare.py` | 登记/显式下载数据、稳定抽样、划分试运行与评价 | 数据 manifest、图对清单、来源与 SHA256 |
-| `M4/models/preprocessing.py` | EXIF、RGB、透明图、尺寸、张量转换 | 统一输入与处理元数据 |
-| `M4/models/adain.py` | 严格加载配套权重、全局 AdaIN、只读特征缓存 | `AdaINEngine` 与真实单图结果 |
-| `M4/models/fusion.py` | 检查软掩码，构建空间强度图，融合特征并整图解码 | 区域生成接口和一致性记录 |
-| `M4/models/cli.py` | 无页面的单图生成入口 | 一条组员可复现的生成命令 |
-| `M4/postcard/render.py` | 中文文字、留白/边框模板、PNG 字节导出 | 可重新打开的明信片文件 |
-| `M4/app.py` | Streamlit 单页交互，调用真实 M5/M6 | 上传、默认/搜索结果、预览与下载 |
-| `M4/bench/profile.py` | 生成与应用阶段计时、内存记录、缓存对照 | 逐次原始记录及汇总 |
-| `M4/tests/` | 预处理、融合、缓存、排版及关键集成检查 | 实际执行结果，不把跳过当通过 |
-| `M4/configs/default.json` | 生成、路径、字体、设备等配置 | 实际配置快照；搜索/区域参数仍由对应成员维护 |
-| 根目录 `contracts.py` | 起草三人共用类型 | 由 M5/M6 共同确认的字段与形状 |
-
-后续需要补 `__init__.py`、依赖说明及真实入口；不要把所有代码堆进 `app.py`。权重、原始数据、私人上传图和运行产物不默认提交到 Git，下载与指纹信息保存在清单中。
-
-## 2. 数据准备：直接使用现成数据
-
-不做人工标注、不训练分类模型、不自行收集大规模图片。
-
-| 数据 | 具体规则 |
-|---|---|
-| Places365 | 使用验证集 `small=True`；按发布版样本/类别映射筛选，不假设图像按类别建文件夹 |
-| 内容类别 | beach（官方表起点48）、mountain（232）、downtown（125）；脚本先核对当前映射 |
-| 抽样 | 每类按相对文件名排序取4张；第1张试运行，其余3张评价；坏文件替代规则预先固定并记录 |
-| The Met | 参考对象436535、45434；获取时检查图片与Open Access/CC0适用标记，保存API元数据和指纹 |
-| 图对清单 | 3张试运行图×2种风格；9张评价图×2种风格。不得交叉用于调参与正式汇总 |
-
-下载必须由显式命令/开关触发；已有数据直接复用，启动页面不下载或扫描整个数据集。small 不是“小样本包”，可能仍需完整验证集压缩包；在说明中列出实际获取成本。
-
-manifest 至少记录：图片ID、发布版/对象ID、来源URL或发布版相对路径、本地相对路径、类别、`pilot/evaluation`、SHA256、尺寸、获取时间与权利说明；图对清单记录 `pair_id/content_id/style_id`。
-
-Places365 不统一属于 CC0，不能按代码许可证再分发全部图片；The Met 的 CC0 只适用于相应开放图像，不宣称取得未核实的逐图许可。默认分享获取脚本与来源清单。
-
-## 3. 先完成能跑通的全局 AdaIN
-
-1. 依据 [AdaIN论文](https://arxiv.org/abs/1703.06868)，选择并固定可复用实现。原作者使用 Torch；[非官方 PyTorch 移植](https://github.com/naoto0804/pytorch-AdaIN)可作起点，但需核查归档项目与当前环境的兼容性。
-2. 登记上游提交/发布版、许可、网络定义、配套编码器/解码器权重来源和 SHA256。文件名相似不能证明配套，严格加载，不能用 `strict=False` 掩盖不匹配。
-3. 单图单风格，起步 FP32；模型 `eval`，推理关闭梯度。设备可自动选择，但必须记录实际设备，不能静默把 CPU 当 GPU 测量。
-4. 内容图保持比例缩放后中心裁剪至256×256。风格图起步长边256、保持比例；过窄图片的最小尺寸规则应固定并记录。先校正 EXIF，转 RGB；透明图按固定背景合成。
-5. 所选归一化 VGG AdaIN 移植的生成输入使用 `[0,1]`；**不能直接照搬普通 torchvision VGG 的 ImageNet 均值方差预处理**。评价网络由M6独立封装。
-6. 检查全局强度0、0.6、1。0对应同一解码器对内容特征的重建，不能要求像素等于原图。
-
-`prepare` 同图对只编码一次，返回内容与 AdaIN 特征。统计计算的方差修正、epsilon位置与所选权重对应实现保持一致，不能不记录地替换定义。
-
-## 4. 对外生成接口
-
-类型字段以[根目录共同合同](../README.md#4-三人共用的接口约定)为准。至少实现：
-
-```python
-# 接口约定，非当前已存在的实现
-pair = engine.prepare(content_image, style_image)
-default = engine.render_global(pair, alpha=0.6)
-candidate = engine.render_regions(pair, regions, region_alphas)
-```
-
-- `prepare` 还要保留处理后的 `content_rgb/style_rgb`，供M5分区及M6评价参考。
-- 缓存键包含图片字节指纹、权重指纹、预处理、设备和精度；不能只用文件名。
-- 将缓存视为只读，不原地修改张量。新候选只融合与解码，不能又从磁盘读图、重新编码。
-- 规范输出统一为 RGB、FP32、`[1,3,H,W]`、裁到`[0,1]`的张量；评分、预览和导出使用同一来源。
-- 显示时才转换到 CPU/PIL；不在每个候选上保存JPEG再读回。
-
-### 区域融合应实现的公式
-
-设内容特征为 `Fc`，完整 AdaIN 特征为 `Fa`，M5软掩码为 `M_i`，M6强度为 `a_i`：
+日常只需要看这五个主目录：
 
 ```text
-A(x,y) = Σ_i a_i × M_i(x,y)
-F(x,y) = A(x,y) × Fa(x,y) + (1-A(x,y)) × Fc(x,y)
-输出 = 同一个解码器(F)
+project/
+├── src/          源码：页面、生成器、融合、排版、测量与工具
+├── resources/    资源：图片、权重、字体、配置、依赖与上游参考
+├── docs/         文档：原方案、接口、验收、论文材料和画质诊断
+├── tests/        测试
+├── outputs/      输出：运行结果、样例、日志和交付 ZIP
+├── app.py        页面启动入口，实际页面代码在 src/app.py
+├── start.ps1     PowerShell 启动脚本
+├── pyproject.toml
+└── README.md
 ```
 
-这是特征空间融合与整图解码。不能改成逐区域裁图生成后拼接，也不能在RGB空间混合原图和风格图。
+看代码进入 `src/`，找输入图片进入 `resources/images/`，找结果进入 `outputs/runs/`，找交付包进入 `outputs/packages/`。详细的新旧目录对照见 `docs/目录说明.md`。`.venv`、`.idea`、`.streamlit` 是环境或工具配置，保留在原位。
 
-准备阶段一次检查掩码的 `[N,Hf,Wf]` 形状、非负有限值、逐位置归一化、有效覆盖和区域顺序；每候选检查强度长度、有限性与范围。非法输入明确报错，不静默修复未知错误。
+**M5 分割与 M6 搜索尚未提供。** 默认风格化与明信片可完整使用；正式区域搜索按钮在模块缺失时禁用。测试中的控制掩码不代表真实分割或搜索。正式 72 图对效果实验尚未执行。
 
-## 5. M5/M6 交接表
+## 在这台电脑启动
 
-| 对方 | 你交给对方 | 对方交给你 | 一起验证 |
-|---|---|---|---|
-| M5 | 处理后的内容RGB、真实特征尺寸、设备与精度 | 区域ID、硬标签、软掩码、邻接权重、元数据 | 同一裁剪；ID与掩码顺序；全0.6一致性 |
-| M6 | 生成回调、默认0.6结果、只读图对、独立评价所需参考图 | 最佳可行图与强度、分数、状态、轨迹、候选与缓存统计 | 默认计入一次预算；评分与显示用同一张规范图 |
-| P1/P3 | 实际界面、PNG、使用步骤与真实失败说明 | PPT需要的尺寸与演示顺序 | 演示不把调试替身当完整搜索 |
+项目内 `.venv` 已配置，权重、字体和图片已取得。PowerShell 在项目根目录执行：
 
-M5未完成时可用N=1或左右两区测试掩码；M6未完成时可手动传强度检查生成。它们只能作为明确标注的测试夹具，不作为实验提升证据。M6未接入时，页面应显示“搜索尚未接入”，不能伪造已改进结果。
-
-## 6. 单页应用和明信片导出
-
-使用 Streamlit，先实现最少流程：
-
-1. 上传内容图与风格图，或选择两张演示参考。
-2. 点击运行，显示输入、默认AdaIN和真实搜索结果；显示未改善、取消、预算耗尽或失败的状态。
-3. 可展开区域划分、强度图、搜索轨迹；复杂技术配置不进入默认用户流程。
-4. 填写中文标题、正文，选择留白或边框模板；文字置于图像外。
-5. 预览并下载PNG。下载后的字节可重新打开，中文、长文与换行正常。
-
-排版函数是独立的纯生成步骤，返回PNG字节，不加载模型。字体位置可配置，检查中文覆盖与使用/分发许可；不写死个人电脑路径。
-
-模型可资源缓存；当前图片、候选与用户文字使用适当会话状态。改文字、换模板或点下载不能重新推理；换任一输入、模型或生成配置必须使旧结果失效。给出缺权重、坏图、缺字体和非法掩码的可理解提示。
-
-## 7. 性能测量与效率证据
-
-分别记录冷启动、图片准备、特征准备、单候选融合/解码、M6评分、完整区域与搜索流程、PNG导出。不得将纯生成耗时称为完整搜索耗时。
-
-- 固定图对、尺寸、硬件、精度、权重和软件版本；例如预热3次，正式至少5次，保存每次原始值和中位数/范围。
-- 使用单调高精度时钟；CUDA异步执行时计时前后同步，或正确使用同步events。
-- 显存注明基线、峰值统计边界、已分配/保留的区别；CPU模式GPU字段用`null`。
-- RSS采样峰值是近似值，记录采样间隔；仅取前后内存不能称精确峰值。
-- 缓存对照：同模型实例、相同候选，比较“每状态重新编码”与“图对编码一次”。先验证输出一致，再报告速度和内存；不以每次重载权重作为唯一对照。
-- M6状态缓存与M4特征缓存分开；各实验方法的状态结果缓存独立，不能共享前一方法免费生成的候选。
-
-日志至少包含：`run_id/pair_id/phase/repeat_index/elapsed_ms`、尺寸、实际设备与精度、模型与配置指纹、软件版本、RSS/显存口径、解码次数、状态与错误。没有实测前不填速度或加速倍数。
-
-## 8. 验收清单
-
-- [ ] 真实权重严格加载，单图全局生成可运行。
-- [ ] EXIF、灰度、透明图与尺寸处理一致；错误输入有提示。
-- [ ] 全部区域0.6与全局0.6一致；检查强度图、特征与输出数值误差。
-- [ ] 同步置换区域ID、掩码与强度后输出不变；非法形状、负掩码和漏覆盖被拒绝。
-- [ ] 多候选调用不污染缓存；缓存与非缓存输出一致。
-- [ ] 真实M5/M6端到端接入；默认回退与调试状态标记真实。
-- [ ] PNG重开成功，中文和长文正常；改文字/下载不重复推理，换图不显示旧结果。
-- [ ] 性能原始记录、计时边界与设备说明齐全。
-- [ ] 源码、依赖、权重/图片/字体来源、许可、配置和使用说明可交给组员复现。
-
-数值一致性可先用同设备FP32的 `rtol=1e-5, atol=1e-6` 作工程起点，再按记录的最大误差冻结。不能为通过而无限放宽容差；需要权重的检查未运行时标为未执行。
-
-## 9. 开发顺序与待实现命令
-
-| 顺序 | 完成条件 |
-|---|---|
-| A | 锁定依赖/权重，命令行真正生成默认图 |
-| B | 数据清单、预处理与只读特征缓存交给M5/M6 |
-| C | 区域融合、错误验证、常数强度与缓存检查通过 |
-| D | 接真实搜索，完成中文模板与单页导出 |
-| E | 统一计时、缓存对照、失败案例及论文材料 |
-
-后续从仓库根目录提供以下入口；当前不可直接运行，需实现后更新为实际参数：
+这段描述仅适用于原开发电脑。从GitHub首次克隆请先执行下一节的资源准备命令；`.venv`、权重、图片、字体二进制和`outputs/`不随Git提交。
 
 ```powershell
-python -m M4.data.prepare --places-root M4/data/external/places365 --output M4/data/manifest.json
-python -m M4.models.cli --content <内容图路径> --style <风格图路径> --alpha 0.6 --config M4/configs/default.json --output <输出路径>
-python -m streamlit run M4/app.py
-python -m M4.bench.profile --content <内容图路径> --style <风格图路径> --repeats 5 --output <日志路径>
+.\.venv\Scripts\python.exe -m streamlit run app.py
 ```
 
-## 10. 你负责的论文章节
+或执行 `powershell -NoProfile -ExecutionPolicy Bypass -File .\start.ps1`。打开终端显示的本地地址，默认 http://127.0.0.1:8501 。程序仅监听本机。
 
-| 课程论文章节 | 具体写什么 | 提供的证据 |
-|---|---|---|
-| 5.1 任务与数据 | 输入输出、固定抽样、划分、来源与权利边界 | manifest、图对清单、预处理配置 |
-| 5.2 AdaIN与空间融合 | 复用底座、全局/空间强度、公式、缓存、整图解码 | 张量流、来源、数值一致性 |
-| 6 Implementation 主笔 | 全部模块如何接起来、版本、缓存、应用与导出 | M5/M6提供各自实现说明；你统一系统描述 |
-| 7.3 时间资源与生成失败 | 实测耗时、缓存取舍、内存/显存、生成限制 | 原始日志、性能表、失败图 |
+页面中选择试运行照片或上传图片，点击“生成风景”，再点击“制作明信片 →”。标题、寄语、版式、预览与下载均在独立弹框内完成。可选择“山海画报”“远方邮笺”“旅途手记”三种横向版式，导出 1500×1000 PNG。修改文字、模板或下载不会重新推理。关闭弹框保留寄语草稿；换图或调整强度会使旧图结果失效。只有点击“保存本次运行记录到项目”才保存完整输入与运行文件。
 
-向P2提供AdaIN文献与复用说明，向P1/P3提供真实演示材料。主笔第6部分不意味着替M5/M6实现全部算法；他们必须提交本模块实现说明。
+顶栏固定显示“山海来信”，界面采用本地宋体与书写体。新版式、字体许可和参考来源见 `docs/前端设计说明.md`。旧验收目录中的明信片是此前版式的历史样例，当前样例位于 `outputs/runs/ui_redesign/`。
 
-## 11. 对齐代码评分
+页面默认是 **清晰创作模式：真实 512×512 生成，风格图长边 512，初始强度 0.8**。可调整全局风格强度，调整后点击生成；同一图对复用编码特征。结果区并排显示相同裁剪的内容与生成图，并可单独下载实际生成尺寸的 PNG。512 模式会增加计算量，原来的约 83ms 单候选记录仅适用于 256 基线。
 
-| 评分项 | M4应提供的证据 |
-|---|---|
-| Coding style 15% | 模型、预处理、融合、排版、页面、计时分开；明确命名、接口文档与关键原因注释；路径配置可移植 |
-| Functionality 15% | 单图命令到真实搜索、中文PNG下载完整运行；组员可复现；失败清楚提示 |
-| Trading algorithm performance 20% | 正确性、无梯度推理、模型与特征复用、必要解码次数、真实时间与资源记录 |
+“实验基线”模式仍使用 `resources/configs/default.json`：256×256、强度 0.6，真实 M5/M6 搜索只在该模式下接入。创作模式使用独立的 `resources/configs/creative.json`；不能将两个分辨率的效果或耗时混在同一实验表中。诊断与实际对照见 `docs/画质诊断.md`。
 
-最后一项是截图原始金融模板名称，适用于本项目的评分口径以教师解释为准。上述权重属于全组评分，不是个人分数承诺。
+当前 Python 是 3.12.15，PyTorch 为 `2.14.1+cpu`，torchvision 为 `0.29.1+cpu`。虽然机器装有 RTX 5070 Laptop GPU，当前环境**实际使用 CPU、FP32、四个计算线程**，没有声称测过 GPU。环境来自原有 NN 环境的只读依赖复用（`venv --system-site-packages`），新增应用与测试包安装在项目 `.venv` 内，未修改原环境。
 
-实际完成后补充验证过的Python/依赖版本、硬件、权重校验值、运行命令与已知问题；不把计划中的功能提前写成已完成。
+## 在其他环境安装
+
+建议使用 Python 3.12 创建独立环境：
+
+```powershell
+# 从 StyleRoute 仓库根目录开始；已经在 M4 内则跳过这一行
+cd M4
+python -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -r resources/env/requirements-dev.txt
+node src/tools/download_assets.mjs
+.\.venv\Scripts\python.exe -m src.tools.build_webfonts
+node src/tools/download_images.mjs --restore
+.\.venv\Scripts\python.exe -m src.tools.prepare_data
+```
+
+Node.js 20 或以上用于显式下载工具，不参与模型推理。上面两个 Node 命令需要网络：模型权重约 94 MB，完整字体合计约 47 MB，图片约 7.55 MiB，均保存来源和 SHA256。FontTools在本地构建约4MB的WOFF字体子集；字体许可随源码保留。依赖准备好后，生成与演示可以离线进行。应用启动和模块导入不下载资源。
+
+`resources/env/requirements-lock.txt` 记录本次验证过的依赖版本；其中 CPU 版 PyTorch 的本地版本后缀与安装渠道有关，换到 CUDA 或其他系统时需按 [PyTorch 官方安装入口](https://pytorch.org/get-started/locally/)选择匹配组合，重新实测并保存环境记录，不把 CPU 日志标成 GPU 结果。
+
+## 单图生成与明信片
+
+```powershell
+.\.venv\Scripts\python.exe -m src.models.cli --content resources/images/content/pilot/mountain/mountain_01.jpg --style resources/images/styles/met_436535.jpg --alpha 0.6 --output outputs/runs/my_demo/default.png --postcard --title 山海来信 --message 把眼前的风景寄给你
+```
+
+每次使用新的运行目录，避免覆盖结果。输出包含输入副本、处理后内容图、默认 PNG、强度图、明信片、配置、环境、图像指纹与生成记录。已知数据图片自动使用 `content_id__style_id` 作为图对 ID，并记录原作者及许可。模型强度 0 是经解码器的内容重建，不保证等于原图。
+
+可直接查看 `outputs/runs/validation/pilot_grid.jpg`、`outputs/runs/validation/postcard_minimal.png` 和 `outputs/runs/validation/postcard_border.png`。这些是试运行与功能样例，不是完整方法效果提升的证据。
+
+需要命令行生成清晰创作版本时，在相同命令中添加 `--config resources/configs/creative.json`，省略 `--alpha` 则采用该配置的 0.8；使用新输出目录，例如 `outputs/runs/creative_demo/default.png`。
+
+## 区域生成接口
+
+```python
+from src.models.adain import AdaINEngine
+from src.project import load_config
+
+engine = AdaINEngine(load_config())
+pair = engine.prepare(content_image, style_image)
+default = engine.render_global(pair, 0.6)
+# regions 必须是 M5 提供的 contracts.RegionPack
+prepared_regions = engine.prepare_regions(pair, regions)
+result = engine.render_regions(pair, prepared_regions, tuple(region_alphas))
+```
+
+`prepare` 对同图对编码一次；候选循环复用 `pair` 和 `prepared_regions`。掩码必须已经归一化，M4 不静默修复错误输入。融合在特征空间发生，随后统一解码整图，评分与导出共用裁到 `[0,1]` 的 FP32 张量。
+
+也可以读取 M5 导出的 NPZ：
+
+```powershell
+.\.venv\Scripts\python.exe -m src.models.cli --content resources/images/content/pilot/mountain/mountain_01.jpg --style resources/images/styles/met_436535.jpg --regions path/to/regions.npz --alphas 0.3,0.9 --output outputs/runs/region_demo/default.png
+```
+
+NPZ 必含 `labels`、`soft_masks`、`region_ids`，可选 `edges`；强度数量与区域数一致。此命令是给定参数的生成，不会执行搜索。完整约定见 `docs/M5_M6接口.md` 与 `src/contracts.py`。
+
+## 数据与性能
+
+当前固定图片集：21 张实景内容照片（3 张试运行、18 张正式评价）和 4 张艺术参考；72 个正式图对、12 个试运行图对。内容来自人工整理的 Commons 集合，**不是 Places365**。来源、选择理由与实验局限见 `resources/images/README.md`。默认页面只提供试运行内容，不把正式样本用于日常调参。
+
+```powershell
+.\.venv\Scripts\python.exe -m src.tools.prepare_data
+.\.venv\Scripts\python.exe -m src.bench.profile --content resources/images/content/pilot/mountain/mountain_01.jpg --style resources/images/styles/met_436535.jpg --warmups 3 --repeats 5 --output outputs/runs/profile/profile.json
+```
+
+性能记录区分模型加载、图片准备、特征准备、单次全局生成、排版导出、M4 完整流程与三状态缓存对照。原始记录包含 RSS 采样范围；CPU 模式的 CUDA 字段是 `null`。缓存对照两侧复用同一个已加载模型，并先验证输出一致。它不是 M6 的搜索性能。
+
+真实 M5/M6 接入后，增加 `--integrated` 可计时包含读图、准备、区域构建与搜索的热模型完整搜索流程。单独评分耗时由 M6 提供；当前缺模块时会明确报错并保存失败记录。
+
+已有 Places365 发布版时，可显式登记并生成独立清单：
+
+```powershell
+.\.venv\Scripts\python.exe -m src.tools.prepare_data --places-root path/to/places365 --per-class 7 --output resources/images/manifest_places365.json
+```
+
+此路径不下载整个 Places365，也不替换当前清单；要求提供官方类别表、验证标签文件和图像，按相对文件名稳定排序。当前未取得该发布版，因此真实 Places365 登记未执行。
+
+## 验证与交付
+
+```powershell
+.\.venv\Scripts\python.exe -m compileall -q src app.py tests
+.\.venv\Scripts\python.exe -m ruff check src app.py tests
+.\.venv\Scripts\python.exe -m pytest tests -q --junitxml=outputs/runs/validation/pytest.xml
+.\.venv\Scripts\python.exe -m src.tools.validate_m4
+```
+
+缺少真实权重的推理测试会标记跳过，不能算已通过。`src.tools.validate_m4` 只使用三张试运行内容图，生成 12 张真实全局样例、中文 PNG 和控制软掩码的数值检查，不会执行 72 图对正式评价。
+
+测试临时文件自动放在 `outputs/test-temp/run-<唯一编号>/`，每次运行使用新目录；pytest 持久缓存默认关闭。这避免 Windows 普通账户与 Codex 隔离账户复用仅所有者可访问的临时目录而出现 `WinError 5`。显式指定 `--basetemp` 时使用调用者提供的目录。
+
+结构：`src/models/` 负责生成；`src/postcard/` 负责排版；`src/integration.py` 负责调用外部模块；`src/bench/` 负责测量；`tests/` 负责必要检查；`src/outputs.py` 负责证据保存；`src/tools/` 提供显式资源准备和样例验证。来源与许可见 `docs/THIRD_PARTY.md`，验收记录见 `docs/M4验收记录.md`，论文材料见 `docs/M4论文材料.md`。
+
+提交源码时 `.gitignore` 默认排除虚拟环境、权重、字体二进制和运行目录；本地文件仍然存在。交付前需按课程要求另附代表输出与原始日志，或在提交包中明确包含它们，不能只提交被忽略后缺证据的源码。
+
+可以生成包含源码、图片、字体、接口文档、样例与真实日志的 ZIP：
+
+```powershell
+.\.venv\Scripts\python.exe -m src.tools.package_submission
+```
+
+默认不打包虚拟环境和权重二进制，接收者按 README 安装依赖并取得权重。需要附权重时添加 `--include-weights --output outputs/packages/M4_with_weights.zip`。包内附文件指纹清单；脚本实际执行 ZIP CRC 核验。
