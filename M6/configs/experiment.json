@@ -1,0 +1,28 @@
+{
+  "comment": "M6 experiment matrix (Phase A skeleton). Values are DRAFTS to be frozen on the pilot split (README section 10.D). Do not treat as tuned.",
+  "levels": [0.3, 0.6, 0.9],
+  "budget": 40,
+  "max_restarts": 2,
+  "tolerance": 1e-9,
+  "seeds": [0, 1, 2, 3, 4],
+  "scoring": {
+    "delta": 0.001,
+    "delta_t": 1e-6,
+    "lam": 1.0,
+    "epsilon": 0.05,
+    "weights": "IMAGENET1K_V1",
+    "q_layer_index": 10,
+    "grad_smooth_kernel": 3,
+    "b_min": 0.1,
+    "b_max": 1.0,
+    "gram_normalisation": "c*h*w"
+  },
+  "global_scan_grid": [0.3, 0.5, 0.6, 0.7, 0.9],
+  "methods": ["risk", "plain", "random_states", "global_scan"],
+  "region_representations": ["fixed_grid_stub"],
+  "notes": {
+    "region_representations": "fixed_grid_stub = M6-owned content-agnostic tiling; replace/add M5 adaptive RegionPack when M5 lands.",
+    "pair_counts": "Read evaluation_pairs / pilot_pairs from M4 resources/images/manifest.json (12 pilot + 72 evaluation per M4 handoff). Do NOT hardcode pair lists here.",
+    "statistics": "Pairs are the statistical unit; the 5 seeds are pre-registered, not independent samples."
+  }
+}
