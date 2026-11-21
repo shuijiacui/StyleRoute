@@ -182,19 +182,33 @@ def run_matrix(args) -> None:
                     flush=True,
                 )
 
-    (out_root / "summary.json").write_text(
+    # 断点续跑合并：按 run_id 去重，后跑的覆盖同 run_id 旧记录
+    merged: dict[str, dict] = {}
+    summary_path = out_root / "summary.json"
+    if summary_path.exists():
+        old = json.loads(summary_path.read_text(encoding="utf-8"))
+        seen_skip = {s["pair_id"] for s in old.get("skipped", [])}
+        skipped = old.get("skipped", []) + [s for s in skipped if s["pair_id"] not in seen_skip]
+        for record in old.get("runs", []):
+            merged[record["run_id"]] = record
+    for record in summary_records:
+        merged[record["run_id"]] = record
+    all_records = sorted(merged.values(), key=lambda r: r["run_id"])
+
+    summary_path.write_text(
         json.dumps(
-            {"split": args.split, "skipped": skipped, "runs": summary_records},
+            {"split": args.split, "skipped": skipped, "runs": all_records},
             ensure_ascii=False,
             indent=1,
         ),
         encoding="utf-8",
     )
-    if summary_records:
+    if all_records:
         with (out_root / "runs.csv").open("w", newline="", encoding="utf-8") as fh:
-            writer = csv.DictWriter(fh, fieldnames=list(summary_records[0].keys()))
+            writer = csv.DictWriter(fh, fieldnames=list(all_records[0].keys()))
             writer.writeheader()
-            writer.writerows(summary_records)
+            writer.writerows(all_records)
+    summary_records = all_records
     print(
         f"=== done: {len(summary_records)} runs, {len(skipped)} skipped -> {out_root}",
         flush=True,

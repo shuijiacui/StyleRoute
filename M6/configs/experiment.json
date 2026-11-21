@@ -1,5 +1,5 @@
 {
-  "comment": "M6 experiment matrix (Phase A skeleton). Values are DRAFTS to be frozen on the pilot split (README section 10.D). Do not treat as tuned.",
+  "comment": "M6 experiment matrix. Pilot split (12 pairs x 4 methods x 5 seeds, 240 runs, 2026-11-22) FROZE: levels/budget/max_restarts/seeds/scoring below. evaluation split 必须使用同一组冻结值。另跑敏感性(如 eps=10%)只能作为补充并在论文中单独标注。",
   "levels": [0.3, 0.6, 0.9],
   "budget": 40,
   "max_restarts": 2,

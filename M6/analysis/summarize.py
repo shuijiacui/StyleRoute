@@ -170,12 +170,13 @@ def make_timing_table(split_dir: Path, out_dir: Path) -> list[dict]:
     table = []
     for method, rows in agg.items():
         j0s = [float(r["q0"]) / (float(r["q0"]) + 1e-3) for r in rows]
+        elapsed = [float(r["elapsed_s"]) for r in rows if str(r.get("elapsed_s", "")).strip()]
         table.append({
             "method": method,
             "runs": len(rows),
             "no_improvement_rate": sum(r["status"] == "no_improvement" for r in rows) / len(rows),
             "mean_decoder_calls": sum(int(r["decoder_calls"]) for r in rows) / len(rows),
-            "mean_elapsed_s": sum(float(r["elapsed_s"]) for r in rows) / len(rows),
+            "mean_elapsed_s": (sum(elapsed) / len(elapsed)) if elapsed else 0.0,
             "mean_final_J_over_J0": sum(float(r["J"]) / j for r, j in zip(rows, j0s)) / len(rows),
         })
     with (out_dir / "timing_table.csv").open("w", newline="", encoding="utf-8") as fh:
