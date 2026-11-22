@@ -1,0 +1,27 @@
+{
+  "comment": "M6 敏感性/消融配置：lambda=0（无协调项 S），其余值与 experiment.json 完全一致（2026-11-22 pilot 冻结）。关系约束实验轴的补充条件：与 lam=1.0 主矩阵对比时只变化 lam，README 要求标为补充实验。",
+  "levels": [0.3, 0.6, 0.9],
+  "budget": 40,
+  "max_restarts": 2,
+  "tolerance": 1e-9,
+  "seeds": [0, 1, 2, 3, 4],
+  "scoring": {
+    "delta": 0.001,
+    "delta_t": 1e-6,
+    "lam": 0.0,
+    "epsilon": 0.05,
+    "weights": "IMAGENET1K_V1",
+    "q_layer_index": 10,
+    "grad_smooth_kernel": 3,
+    "b_min": 0.1,
+    "b_max": 1.0,
+    "gram_normalisation": "c*h*w"
+  },
+  "global_scan_grid": [0.3, 0.5, 0.6, 0.7, 0.9],
+  "methods": ["risk", "plain"],
+  "region_representations": ["fixed_grid_stub"],
+  "notes": {
+    "purpose": "README section 6 关系约束轴的 lambda=0 补充条件（固定网格上），主对照仍是 lam=1.0 evaluation 矩阵。",
+    "statistics": "Pairs are the statistical unit; the 5 seeds are pre-registered, not independent samples."
+  }
+}

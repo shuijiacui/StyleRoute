@@ -79,7 +79,7 @@ def run_matrix(args) -> None:
     engine = AdaINEngine(load_config(args.team_config or (_REPO_ROOT / "M4" / "resources" / "configs" / "team.json")))
     build_regions = load_adapter(engine.config["region_adapter"])
 
-    out_root = Path(args.out_root) / args.split
+    out_root = Path(args.out_root).resolve() / args.split
     out_root.mkdir(parents=True, exist_ok=True)
 
     summary_records = []
