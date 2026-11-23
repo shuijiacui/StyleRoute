@@ -1,0 +1,130 @@
+{
+  "continue": {
+    "iistart": "2012-07-05T08:05:05Z",
+    "continue": "||"
+  },
+  "query": {
+    "pages": {
+      "1226206": {
+        "pageid": 1226206,
+        "ns": 6,
+        "title": "File:Landscape Arnisee-region.JPG",
+        "imagerepository": "local",
+        "imageinfo": [
+          {
+            "timestamp": "2021-07-16T11:09:38Z",
+            "size": 4666555,
+            "width": 3008,
+            "height": 2000,
+            "thumburl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/14/Landscape_Arnisee-region.JPG/1280px-Landscape_Arnisee-region.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+            "thumbwidth": 1280,
+            "thumbheight": 851,
+            "responsiveUrls": {
+              "2": "https://upload.wikimedia.org/wikipedia/commons/1/14/Landscape_Arnisee-region.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled"
+            },
+            "thumbattribs": {
+              "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/14/Landscape_Arnisee-region.JPG/1280px-Landscape_Arnisee-region.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+              "decoding": "async",
+              "loading": "lazy",
+              "width": 1280,
+              "height": 851,
+              "srcset": "https://upload.wikimedia.org/wikipedia/commons/1/14/Landscape_Arnisee-region.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled 2x"
+            },
+            "url": "https://upload.wikimedia.org/wikipedia/commons/1/14/Landscape_Arnisee-region.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+            "descriptionurl": "https://commons.wikimedia.org/wiki/File:Landscape_Arnisee-region.JPG",
+            "descriptionshorturl": "https://commons.wikimedia.org/w/index.php?curid=1226206",
+            "sha1": "07f05d8aeb5e2d3a09001d79b83ce73c87da9696",
+            "extmetadata": {
+              "DateTime": {
+                "value": "2021-07-16 11:09:38",
+                "source": "mediawiki-metadata",
+                "hidden": ""
+              },
+              "ObjectName": {
+                "value": "Landscape Arnisee-region",
+                "source": "mediawiki-metadata"
+              },
+              "CommonsMetadataExtension": {
+                "value": 1.2,
+                "source": "extension",
+                "hidden": ""
+              },
+              "Categories": {
+                "value": "Gross Windgällen|Chli Windgällen|Taken with Nikon D50|Mountains in the canton of Uri|Featured pictures of the canton of Uri|Featured Images taken by Simon Koopmann|Pictures taken by Simon Koopmann|Featured pictures of the Alps in Switzerland|Featured pictures on Wikipedia, Azeri|Files with coordinates missing SDC location of creation|September 2006 in the canton of Uri|Switzerland photographs taken on 2006-09-16",
+                "source": "commons-categories",
+                "hidden": ""
+              },
+              "Assessments": {
+                "value": "quality|featured|potd",
+                "source": "commons-categories",
+                "hidden": ""
+              },
+              "GPSLatitude": {
+                "value": "46.777500",
+                "source": "commons-desc-page"
+              },
+              "GPSLongitude": {
+                "value": "8.649111",
+                "source": "commons-desc-page"
+              },
+              "GPSMapDatum": {
+                "value": "WGS-84",
+                "source": "commons-desc-page",
+                "hidden": ""
+              },
+              "ImageDescription": {
+                "value": "View from Arni to Chli Windgällen (2986m, in front) and the Groß Windgällen (3188m, behind) in the Canton of Uri/Switzerland",
+                "source": "commons-desc-page"
+              },
+              "DateTimeOriginal": {
+                "value": "2006-09-16",
+                "source": "commons-desc-page"
+              },
+              "Credit": {
+                "value": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+                "source": "commons-desc-page"
+              },
+              "Artist": {
+                "value": "<a href=\"//commons.wikimedia.org/wiki/User:Simonizer\" title=\"User:Simonizer\">Simon Koopmann</a>",
+                "source": "commons-desc-page"
+              },
+              "LicenseShortName": {
+                "value": "CC BY-SA 2.5",
+                "source": "commons-desc-page",
+                "hidden": ""
+              },
+              "UsageTerms": {
+                "value": "Creative Commons Attribution-Share Alike 2.5",
+                "source": "commons-desc-page"
+              },
+              "AttributionRequired": {
+                "value": "true",
+                "source": "commons-desc-page",
+                "hidden": ""
+              },
+              "LicenseUrl": {
+                "value": "https://creativecommons.org/licenses/by-sa/2.5",
+                "source": "commons-desc-page"
+              },
+              "Copyrighted": {
+                "value": "True",
+                "source": "commons-desc-page",
+                "hidden": ""
+              },
+              "Restrictions": {
+                "value": "",
+                "source": "commons-desc-page",
+                "hidden": ""
+              },
+              "License": {
+                "value": "cc-by-sa-2.5",
+                "source": "commons-templates",
+                "hidden": ""
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

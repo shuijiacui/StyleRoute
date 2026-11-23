@@ -1,0 +1,32 @@
+{
+  "verified_at": "2026-11-15T14:22:37.384Z",
+  "scope": "M4 source publication and handoff readiness",
+  "pytest": {
+    "passed": 46,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0,
+    "local_seconds": 14.69,
+    "isolated_copy_seconds": 13.62
+  },
+  "ruff": "passed",
+  "dataset": {
+    "images": 25,
+    "pilot_pairs": 12,
+    "evaluation_pairs": 72,
+    "sha256_verification": "passed",
+    "metadata_paths": "all 25 exist"
+  },
+  "publication_validation": {
+    "isolated_source_tree": true,
+    "reused_existing_python_environment": true,
+    "reused_verified_downloaded_assets": true,
+    "webfonts_built_in_isolated_tree": true,
+    "untracked_historical_outputs_required": false,
+    "clean_machine_dependency_install_tested": false
+  },
+  "real_m5_m6_integration": "not run; production adapters not provided",
+  "formal_72_pair_evaluation": "not run",
+  "gpu_performance": "not measured; actual tests CPU FP32",
+  "browser_validation": "Previous UI revision passed real Edge generation/dialog/download and 390px viewport checks; this publication changes the reference-image contract and setup only."
+}
