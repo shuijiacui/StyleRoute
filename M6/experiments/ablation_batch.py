@@ -38,6 +38,7 @@ def main() -> None:
     parser.add_argument("--config", default=str(_REPO_ROOT / "M6" / "configs" / "experiment_lam0.json"))
     parser.add_argument("--out-root", required=True)
     parser.add_argument("--split", default="evaluation")
+    parser.add_argument("--team-config", default=None, help="传给 run.py 的 --team-config")
     parser.add_argument("--methods", nargs="*", default=None, help="默认取配置里的 methods")
     args = parser.parse_args()
 
@@ -66,6 +67,7 @@ def main() -> None:
         subprocess.run(
             [str(python), "-m", "M6.experiments.run", "--split", args.split,
              "--config", args.config, "--out-root", args.out_root,
+             *([ "--team-config", args.team_config ] if args.team_config else []),
              "--pairs", pair, "--methods", method,
              "--seeds", *[str(s) for s in args.seeds]],
             cwd=_REPO_ROOT, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,

@@ -76,7 +76,7 @@ def run_matrix(args) -> None:
         pairs = [p for p in pairs if p["pair_id"] in keep]
 
     solve = load_adapter("M6.search.adapter:solve")
-    engine = AdaINEngine(load_config(args.team_config or (_REPO_ROOT / "M4" / "resources" / "configs" / "team.json")))
+    engine = AdaINEngine(load_config(Path(args.team_config or (_REPO_ROOT / "M4" / "resources" / "configs" / "team.json")).resolve()))
     build_regions = load_adapter(engine.config["region_adapter"])
 
     out_root = Path(args.out_root).resolve() / args.split
