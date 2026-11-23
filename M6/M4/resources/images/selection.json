@@ -1,0 +1,35 @@
+{
+  "dataset_id": "m4-curated-commons-met-v1",
+  "description": "A manually curated replacement for the proposed Places365 subset; not Places365 and not a random benchmark sample.",
+  "content_source": "Wikimedia Commons",
+  "selection_policy": "Frozen before model evaluation. Seven distinct photographs per scene category: one pilot and six evaluation. Selected for scene relevance, different locations, composition and lighting; no stylization results used for selection. Styles are shared across pilot and evaluation, so the split does not test unseen-style generalization.",
+  "content_images": [
+    {"id":"beach_01","class_name":"beach","usage":"pilot","title":"File:Rügen, Beach at Sellin -- 2009 -- 1173.jpg","label_zh":"德国吕根岛：沙滩椅阵列","reason_zh":"重复人工结构与沙地用于细小区域和纹理的压力试运行；该构图不包含开阔天空和完整海岸线。"},
+    {"id":"beach_02","class_name":"beach","usage":"evaluation","title":"File:Mandrem Beach and Mandrem River, Mandrem, Goa, India (edit).jpg","label_zh":"印度果阿：河口与海滩","reason_zh":"水面、沙滩和植被相邻，测试多区域边界。"},
+    {"id":"beach_03","class_name":"beach","usage":"evaluation","title":"File:Parasols, Evening, Beach, Rincon de la Victoria, Andalusia, Spain.jpg","label_zh":"西班牙：傍晚海滩与遮阳伞","reason_zh":"暖色光照及细小人工结构。"},
+    {"id":"beach_04","class_name":"beach","usage":"evaluation","title":"File:Seal Rocks, Ocean Beach, San Francisco.jpg","label_zh":"美国旧金山：岩礁海岸","reason_zh":"岩石、浪花与海面纹理。"},
+    {"id":"beach_05","class_name":"beach","usage":"evaluation","title":"File:Gjipe beach, Albania.JPG","label_zh":"阿尔巴尼亚：Gjipe 海湾","reason_zh":"海湾、山崖与沙滩的结构关系。"},
+    {"id":"beach_06","class_name":"beach","usage":"evaluation","title":"File:Preveli Palm Beach Panorama 02.JPG","label_zh":"希腊克里特岛：棕榈海滩与河口","reason_zh":"较宽构图中的河流、海岸和植被；需要记录中心裁剪影响。"},
+    {"id":"beach_07","class_name":"beach","usage":"evaluation","title":"File:Baie Lazare Public Beach - Mahe - Seychelles - 01.jpg","label_zh":"塞舌尔：Baie Lazare 海滩","reason_zh":"热带海岸的植被、沙滩与水面。"},
+    {"id":"mountain_01","class_name":"mountain","usage":"pilot","title":"File:Zagedan Lakes, Mountain cirque, Caucasus Mountains.jpg","label_zh":"高加索：Zagedan 山间湖","reason_zh":"山体、湖水与天空用于接口试运行。"},
+    {"id":"mountain_02","class_name":"mountain","usage":"evaluation","title":"File:Mountains in snow, Mountain lake, Chola Valley, Nepal, Himalayas.jpg","label_zh":"尼泊尔：喜马拉雅雪山与湖泊","reason_zh":"高亮雪面与暗色岩石，测试纹理和明暗边界。"},
+    {"id":"mountain_03","class_name":"mountain","usage":"evaluation","title":"File:Landscape Arnisee-region.JPG","label_zh":"瑞士：Arnisee 地区山景","reason_zh":"绿色山坡与远处岩峰。"},
+    {"id":"mountain_04","class_name":"mountain","usage":"evaluation","title":"File:Ergaki, Mountain lake Skazka, Rock formations, Sayan Mountains, Russia.jpg","label_zh":"俄罗斯：Ergaki 山湖与岩峰","reason_zh":"山体轮廓、湖面和前景的区域关系。"},
+    {"id":"mountain_05","class_name":"mountain","usage":"evaluation","title":"File:Matterhorn, March 2019 (01).jpg","label_zh":"瑞士：马特洪峰雪景","reason_zh":"清晰尖峰轮廓及雪面。"},
+    {"id":"mountain_06","class_name":"mountain","usage":"evaluation","title":"File:Oxbow Bend outlook in the Grand Teton National Park.jpg","label_zh":"美国大提顿：河湾与山峰","reason_zh":"河流、树木和远山形成不同尺度的结构。"},
+    {"id":"mountain_07","class_name":"mountain","usage":"evaluation","title":"File:Cheops Mountain seen the Sir Donald Trail.jpg","label_zh":"加拿大：Cheops 山","reason_zh":"森林山地与岩石山体的边界。"},
+    {"id":"downtown_01","class_name":"downtown","usage":"pilot","title":"File:Skyline Frankfurt am Main.jpg","label_zh":"德国法兰克福：夜间天际线","reason_zh":"夜间建筑、河面反射和天空用于接口试运行。"},
+    {"id":"downtown_02","class_name":"downtown","usage":"evaluation","title":"File:Vilnius Modern Skyline At Dusk, Lithuania - Diliff.jpg","label_zh":"立陶宛维尔纽斯：黄昏城市","reason_zh":"低光照与建筑群的复杂边界。"},
+    {"id":"downtown_03","class_name":"downtown","usage":"evaluation","title":"File:Prague skyline at dawn.jpg","label_zh":"捷克布拉格：黎明建筑剪影","reason_zh":"刻意保留的困难场景：暗部建筑细节少，主要评价轮廓，不能将其等同于清晰日间城市。"},
+    {"id":"downtown_04","class_name":"downtown","usage":"evaluation","title":"File:New York City at night HDR.jpg","label_zh":"美国纽约：黑白 HDR 夜间街道","reason_zh":"密集建筑、招牌和细线条；源图呈黑白效果且已为 HDR，作为困难场景，须保留处理说明。"},
+    {"id":"downtown_05","class_name":"downtown","usage":"evaluation","title":"File:Snow-covered Quebec City skyline in fog.jpg","label_zh":"加拿大魁北克：雾中雪城","reason_zh":"低对比度、雾与雪覆盖建筑。"},
+    {"id":"downtown_06","class_name":"downtown","usage":"evaluation","title":"File:Skyline of the Central Business District of Singapore with Esplanade Bridge.jpg","label_zh":"新加坡：夜间建筑与桥梁","reason_zh":"人工照明、细小建筑结构及水面反射。"},
+    {"id":"downtown_07","class_name":"downtown","usage":"evaluation","title":"File:Shanghai skyline waterfront pudong 5166168 69 70.jpg","label_zh":"中国上海：浦东滨水天际线","reason_zh":"密集高层建筑与水面；来源文件名提示可能含多曝光处理，保留原始元数据供核查。"}
+  ],
+  "style_images": [
+    {"id":"met_436535","object_id":436535,"label_zh":"梵高《麦田与柏树》","reason_zh":"明显方向性笔触、较强纹理及蓝黄绿配色。"},
+    {"id":"met_45434","object_id":45434,"label_zh":"北斋《神奈川冲浪里》","reason_zh":"木版画轮廓、平涂色块与蓝白色调。"},
+    {"id":"met_437854","object_id":437854,"label_zh":"透纳《捕鲸船》","reason_zh":"柔化边界、雾状笔触及暖灰色调。"},
+    {"id":"met_436121","object_id":436121,"label_zh":"德加《坐在花瓶旁的女子》","reason_zh":"人物与花卉细节、较暗背景及不同于另三幅的颜色分布。"}
+  ]
+}
