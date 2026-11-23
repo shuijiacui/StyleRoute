@@ -1,3 +1,0 @@
-* text=auto
-# Frozen selection bytes are part of manifest.selection_sha256.
-resources/images/selection.json -text
