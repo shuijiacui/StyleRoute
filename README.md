@@ -1,127 +1,70 @@
-# StyleRoute · 风格之旅
+# StyleRoute · 山海来信
 
-基于 **AdaIN、内容自适应区域和约束局部搜索**的艺术旅行明信片生成项目。
+StyleRoute 是一个风景照片风格迁移与明信片制作项目。选择风景照和风格参考，即可并排比较同分辨率的 **AdaIN 直出**与**区域搜索结果**，同步放大查看细节，并下载完整 PNG 或制作明信片。
 
-用户输入一张内容图和一张希望参考的风格图，系统生成艺术图像，加入标题与文字，预览并下载明信片。项目采用现成预训练权重，不训练新的风格迁移网络。
+[Final](Final/) 是当前可运行的整合版。安装、启动和实验命令均在 `Final/` 下执行。
 
-> 当前仓库初始化的是开发说明。这些 README 描述待实现的工作，不代表模型已跑通、实验已完成或改进已得到验证。参数均为工程起点，须经独立试运行后冻结。
+## 快速开始
 
-## 1. 从哪里开始
+以下命令适用于 Windows PowerShell，需要 Git、Python 3.12 和 Node.js 20 或以上版本。首次安装需要联网准备依赖、图片、字体和模型权重。
 
-| 文件夹 | 负责人 | 核心任务 | 说明 |
-|---|---|---|---|
-| [M4](M4/README.md) | 生成与应用成员 | 数据准备、AdaIN、区域特征融合、单页应用、文字与 PNG 导出、生成性能测量 | 给定图片和区域强度，稳定生成结果 |
-| [M5](M5/README.md) | 区域成员 | SLIC/SLICO、相邻合并、区域关系图、软掩码、网格对照与区域可视化 | 决定内容如何划分，以及相邻区域如何关联 |
-| [M6](M6/README.md) | 搜索与实验成员 | Q/T/S 评分、约束搜索、基线与消融、批量实验、统计图表、报告整合 | 决定强度如何分配，并验证方法是否有意义 |
+~~~powershell
+git clone https://github.com/shuijiacui/StyleRoute.git
+cd StyleRoute\Final
 
-采用最终的**三位演讲成员 P1/P2/P3，加三位主要技术成员 M4/M5/M6**方案。旧两人 pre 版本的代号分工不适用于本仓库。演讲总长 7 分钟，演讲成员制作自己部分的 PPT；技术成员提供真实图表和解释。
+python -m venv .venv
+$py = ".\.venv\Scripts\python.exe"
+& $py -m pip install -r requirements.txt
 
-## 2. 完整叙事与研究问题
+node src/tools/download_assets.mjs
+node src/tools/download_images.mjs --restore
+& $py -m src.tools.build_webfonts
+& $py -m src.tools.prepare_evaluator
+& $py -m src.tools.prepare_aesthetics
 
-全局风格强度容易让不同内容区域受到相同处理。我们拟按内容划分区域，允许各区域使用不同强度，并通过区域关系减少外观连续位置的不协调；再用受约束的局部搜索自动选择强度。
+& $py -m streamlit run app.py --server.address 127.0.0.1 --server.port 8501
+~~~
 
-需要分别验证两个问题：
+打开 [本地页面](http://127.0.0.1:8501)。后续启动也可运行 `.\start.ps1`。
 
-1. **区域控制是否值得增加复杂度？** 在风格统计损失可比时，内容自适应区域是否比全局强度扫描或固定网格带来更好的结构代理指标与运行取舍？
-2. **风险排序是否有搜索价值？** 在相同区域、目标、起点和预算下，风险引导是否比普通局部搜索更有效？
+1. 选择山地、海岸或城市照片及风格参考，也可上传自己的图片。
+2. 点击「仅生成 AdaIN」查看当前全局强度的直出。点击「生成双图对照」以全局强度 `0.6` 生成基准，再运行区域搜索。默认两张图均为 **512 × 512**。
+3. 用「对照范围」同步放大两张图，在「区域分析」和「评分」查看分区、强度与指标，并下载任一结果的完整 PNG。
 
-搜索的是冻结生成器上的区域控制状态；它不会自动提高生成模型的表达上限。找到的是预算内最佳已发现可行结果，不是已知全局最优，也不等同于审美最优。
+## 方法
 
-## 3. 系统调用链
+1. **生成基准。** 内容照中心裁剪到 512 × 512，风格参考等比缩放至长边 512。AdaIN 的编码特征由基准和搜索候选共享。
+2. **按内容分区。** 用 SLIC 初始化超像素，再按邻接关系合并。将区域标签转成特征空间的软掩码，用于平滑混合各区的风格强度。
+3. **联合搜索。** CMA-ES 同时调整各区连续风格强度 `α∈[0,1]` 和局部明度补偿 `β∈[0,1]`。补偿在解码后应用，用零风格强度重建的明度残差作参考，作用于原图平滑的区域内部。默认预算为 80 个候选，包含基准与预搜索。
+4. **选择结果。** 综合目标 `J` 偏好更高的 NIMA-AVA 美学预测 `A`、更低的新增 Lab 不均匀度 `U` 和更低的 VGG19 结构误差 `Q`。候选风格误差 `T` 最多为基准的 1.05 倍。若可行候选没有达到改善阈值，返回基准图。
 
-```text
-内容图 + 风格参考
-  → M4：统一预处理，编码一次，缓存内容与 AdaIN 特征
-  → M5：对预处理后的内容图分区，输出区域图和特征尺寸软掩码
-  → M6：提出区域强度 → 调用 M4 生成 → 评分与约束检查 → 继续搜索
-  → M6：返回最佳可行结果、状态与轨迹
-  → M4：预览、文字模板、PNG 下载
-```
+## 仓库结构
 
-每个新候选通常仍要解码和评分。复用编码特征不意味着搜索没有额外成本。
-
-## 4. 三人共用的接口约定
-
-下列名称是**待实现合同**。由 M4 起草根目录 `contracts.py`，M5/M6 确认字段，M6 在联调时维护一致性；当前不提供空壳程序冒充已实现接口。
-
-| 对象 | 必须包含的字段与含义 |
+| 目录 | 内容 |
 |---|---|
-| `PreparedPair` | `pair_id`、处理后的 `content_rgb` 与 `style_rgb`、`content_tensor`、`content_features`、`adain_features`、`input_hw`、`feature_hw`、`cache_key`、`metadata`。保留风格 RGB 输入供独立评价器使用 |
-| `RegionPack` | `region_ids`、`labels`、`soft_masks`、`edges`、`metadata`。节点附加统计可放入 metadata，并说明格式 |
-| `GenerationResult` | `image_rgb`、`alpha_map`、`metadata` |
-| `ScoreResult` | `Q`、`T`、`S`、`J`、`violation`、`feasible`、`region_risks`；M6 负责定义 |
-| `SearchResult` | `best_image_rgb`、`best_alphas`、最佳分数、`status`、`stop_reason`、`trajectory`、不同状态评价数、解码次数、状态缓存命中数；M6 负责定义 |
+| [Final](Final/) | 当前整合版，包含应用、测试、配置、资源脚本和实验入口 |
+| [M4](M4/) | AdaIN 生成、区域特征融合、界面和明信片排版的原始模块 |
+| [M5](M5/) | 内容分区、邻接图与软掩码的原始模块 |
+| [M6](M6/) | 评分、搜索基线与实验的原始模块 |
 
-统一规则：
+<a id="4-三人共用的接口约定"></a>
 
-- 尺寸元组使用 `(H, W)`；PIL 的 `.size` 是 `(W, H)`，边界处显式转换。
-- 内容张量为 `[1,3,H,W]`，生成图为同形状的 RGB、FP32、`[0,1]` 张量；不先保存 JPEG 再评分。
-- 内容与 AdaIN 特征为 `[1,C,Hf,Wf]`。区域标签为 `[H,W]` 整数数组，ID 连续从 0 开始。
-- `soft_masks` 为 `[N,Hf,Wf]` 非负有限浮点张量，每个位置沿 N 维求和约等于 1。
-- `region_ids`、软掩码、强度数组采用同一顺序；边记录 `(i,j,w)`，只存一次无向边，`i < j`，权重有限且非负。
-- 特征融合时，特征、掩码、强度的设备与精度一致；缓存按只读使用。字段不可重新赋值不等于张量不可变。
-- 生成器、区域和搜索配置以及图片、权重指纹进入结果元数据；不得只按文件名识别输入。
-- 根目录共享合同只依赖基础类型，不导入页面或业务模块，避免循环导入。后续从仓库根目录执行命令，模块使用 `M4.*`、`M5.*`、`M6.*` 路径。
+整合版接口位于 [共享数据类型](Final/src/contracts.py) 和 [集成调度](Final/src/integration.py)。模块调用顺序和评分定义见 [架构与评分](Final/docs/architecture.md)。
 
-建议调用方式，以下为伪代码：
+## 数据与实验
 
-```python
-pair = engine.prepare(content_image, style_image)  # M4
-regions = build_regions(                        # M5
-    pair.content_rgb,
-    feature_hw=pair.feature_hw,
-    device=pair.content_features.device,
-)
-default_result = engine.render_global(pair, alpha=0.6)
+项目清单包括 21 张来自 Wikimedia Commons 的风景照片和 4 张 The Met 开放风格参考。每类首张照片与四种风格配成 12 个试运行图对，用于校准评分尺度。其余 18 张照片用于 72 个正式评价图对。来源及许可见 [数据清单](Final/resources/images/README.md)。
 
-def generate(alphas):
-    return engine.render_regions(pair, regions, alphas)
+在三个采用同一风格参考的试运行图对中，80 候选预算下，海岸、山地和城市样例的 `U` 分别降低约 16%、49% 和 57%。用于最终复核的 MUSIQ-AVA 在山地和城市样例上升，海岸样例基本持平。正式 72 图对评测尚未运行。
 
-result = solve(                                 # M6
-    generate=generate,
-    pair=pair,
-    regions=regions,
-    initial_result=default_result,
-    search_config=search_config,
-)
-```
+运行测试及复现单图对照：
 
-## 5. 数据与最小范围
+~~~powershell
+$py = ".\.venv\Scripts\python.exe"
+& $py -m pytest tests -q
+& $py -m src.experiments.run --config resources/configs/landscape_experiment.json --out-root outputs/experiments/landscape-readme --split pilot --pairs mountain_01__met_436535 --seeds 0
+~~~
 
-| 项目 | 工作计划 |
-|---|---|
-| 内容图 | Places365 验证集 small 版本；beach、mountain、downtown 各按文件名稳定抽取 4 张 |
-| 划分 | 每类首张作试运行，共 3 张；其余 9 张作正式评价，二者不重叠 |
-| 风格图 | The Met 对象 436535、45434 为起步参考；获取时核查对应图片的 Open Access/CC0 标记并记录元数据 |
-| 图对 | 9 张正式内容图 × 2 张风格图 = 18 个正式图对；6 个试运行图对单独使用 |
-| 输入 | 内容图起步为保持比例缩放后中心裁剪至 256×256；风格图保持比例缩放，具体规则由 M4 固定 |
-| 不增加 | 人工标注、数据集训练、PACS 分类、SAM、新网络训练、多风格混合、账号系统或云部署 |
+实验保存搜索轨迹、评分、浮点图像和 PNG 对照。配置涵盖旧风险搜索、沿用旧评分的 CMA-ES、使用新评分的 CMA-ES，以及加上局部补偿的版本。正式评价和 MUSIQ 复核命令见 [整合版运行手册](Final/README.md)。
 
-Places365 **不是统一 CC0**；small 指图像尺寸较小，不代表只需下载十几张。默认公开提供获取脚本与清单，图片再分发须依据对应权利核查。The Met 的 CC0 政策只覆盖相应开放图像，不能推及全部馆藏。两张演示风格不限制用户上传其他风格参考，但正式评价使用固定清单。
-
-## 6. 联调与交付顺序
-
-| 阶段 | M4 | M5 | M6 | 通过条件 |
-|---|---|---|---|---|
-| A 各自最小闭环 | 全局 AdaIN 真正生成一张图 | 一张内容图的标签与关系图 | 用可控假评分验证求解逻辑 | 接口、尺寸和编号达成一致；假评分只作程序检查 |
-| B 真实联调 | 缓存、区域融合 | 特征尺寸软掩码 | 真实 Q/T/S 与搜索 | 全 0.6 区域结果等于全局 0.6；默认状态可行 |
-| C 试运行冻结 | 数据与应用 | 合并、权重、平滑参数 | 损失、阈值、预算、种子 | 试运行问题解决，配置冻结，保底与错误可追溯 |
-| D 正式评价 | 生成性能与失败案例 | 区域结果分析 | 批量实验和搜索结果分析 | 原始记录完整，不只保留成功样例 |
-| E 提交与展示 | 5.1、5.2、6、7.3 | 5.3、7.1 | 5.4、5.5、7.2、7.4及全文整合 | P1/P2/P3拿到真实材料，完成7分钟演练 |
-
-不设置未经小组确认的日期。P1负责题目与引言初稿，P2负责综述统稿与方法展示，P3在真实结果后写摘要（200–250 words）与结论初稿，并整理实验和展示材料。
-
-## 7. 全组代码交付要求
-
-评分截图中代码项为 Coding style 15%、Functionality 15%、Trading algorithm performance 20%。最后一项沿用金融模板措辞；本项目拟提交算法正确性、效率及冗余计算控制证据，具体适用口径以教师解释为准。
-
-每位成员应提交清晰命名、合理模块和函数、必要注释、明确异常、可移植配置、第三方来源与许可记录；提供真实运行入口、必要正确性检查和可复现输出。代码完成后写入实际验证的环境版本，不能把这里的目标写成已完成状态。未经运行的命令应继续注明“待实现”。
-
-## 8. 主要参考
-
-- [AdaIN 论文](https://arxiv.org/abs/1703.06868)、[原作者代码](https://github.com/xunhuang1995/AdaIN-style)、[非官方 PyTorch 移植](https://github.com/naoto0804/pytorch-AdaIN)
-- [scikit-image 区域邻接图合并示例](https://scikit-image.org/docs/stable/auto_examples/segmentation/plot_rag_merge.html)
-- [Places365 官方仓库](https://github.com/CSAILVision/places365)、[torchvision 数据接口](https://docs.pytorch.org/vision/stable/generated/torchvision.datasets.Places365.html)
-- [The Met 开放图像政策](https://www.metmuseum.org/policies/image-resources)
-
-本次初始化只建立职责和开发规范，不为尚未确定的全仓库代码许可作选择。
+[AdaIN 论文](https://arxiv.org/abs/1703.06868) · [CMA-ES 教程](https://arxiv.org/abs/1604.00772) · [第三方来源与许可](Final/docs/THIRD_PARTY.md)
