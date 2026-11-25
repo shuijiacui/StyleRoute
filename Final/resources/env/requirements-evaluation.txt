@@ -1,0 +1,3 @@
+-r requirements.txt
+# Final-only independent AVA cross-check, not required by the interactive search.
+pyiqa>=0.1.16,<0.2

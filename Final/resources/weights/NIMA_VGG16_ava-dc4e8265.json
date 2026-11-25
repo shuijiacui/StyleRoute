@@ -1,0 +1,12 @@
+{
+  "model": "nima-vgg16-ava",
+  "dataset": "AVA",
+  "range": [
+    1,
+    10
+  ],
+  "source": "https://huggingface.co/chaofengc/IQA-PyTorch-Weights/resolve/main/NIMA_VGG16_ava-dc4e8265.pth",
+  "download_source": "https://hf-mirror.com/chaofengc/IQA-PyTorch-Weights/resolve/main/NIMA_VGG16_ava-dc4e8265.pth",
+  "sha256": "dc4e8265bee9475027f321adcb4241bb0ec15722c955d53e3869492b7f33ab34",
+  "implementation": "IQA-PyTorch reproduction; not original authors' weights"
+}

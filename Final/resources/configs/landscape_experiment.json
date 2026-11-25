@@ -1,0 +1,52 @@
+{
+  "comment": "Landscape ablation. Fixed scales are calibrated on pilot pairs only.",
+  "levels": [
+    0.3,
+    0.6,
+    0.9
+  ],
+  "budget": 80,
+  "max_restarts": 2,
+  "tolerance": 1e-09,
+  "seeds": [
+    0
+  ],
+  "scoring": {
+    "delta": 0.001,
+    "delta_t": 1e-06,
+    "lam": 1.0,
+    "epsilon": 0.05,
+    "weights": "IMAGENET1K_V1",
+    "q_layer_index": 11,
+    "grad_smooth_kernel": 3,
+    "b_min": 0.1,
+    "b_max": 1.0,
+    "gram_normalisation": "c*h*w"
+  },
+  "global_scan_grid": [
+    0.3,
+    0.6,
+    0.9
+  ],
+  "methods": [
+    "risk",
+    "cma_legacy",
+    "cma_landscape",
+    "cma_compensated"
+  ],
+  "region_representations": [
+    "content_adaptive"
+  ],
+  "version": "landscape-v3",
+  "landscape": {
+    "aesthetic_weight": 0.4,
+    "uniformity_weight": 0.4,
+    "structure_weight": 0.2,
+    "aesthetic_scale": 1.0,
+    "uniformity_scale": 1.6009109549265488,
+    "structure_scale": 1.0,
+    "minimum_improvement": 0.002
+  },
+  "sigma": 0.14,
+  "calibration": "63b1e793219e666c221c9c98092e28fc3d403922a8e028f6d7db7ed503989b28"
+}

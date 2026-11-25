@@ -1,0 +1,3 @@
+# Unified development/runtime environment for the integrated project.
+-r resources/env/requirements-dev.txt
+

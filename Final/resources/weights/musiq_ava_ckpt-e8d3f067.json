@@ -1,0 +1,11 @@
+{
+  "model": "musiq-ava",
+  "sha256": "e8d3f0671965dfe4301a1f7a4aedc8f49be8fed33b82dd5d116a9eb3ce2bd16b",
+  "source": "https://huggingface.co/chaofengc/IQA-PyTorch-Weights/resolve/main/musiq_ava_ckpt-e8d3f067.pth",
+  "range": [
+    1,
+    10
+  ],
+  "use": "final evaluation only",
+  "download_source": "https://github.com/chaofengc/IQA-PyTorch/releases/download/v0.1-weights/musiq_ava_ckpt-e8d3f067.pth"
+}

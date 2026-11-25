@@ -1,0 +1,8 @@
+{
+  "weights": "IMAGENET1K_V1",
+  "source": "https://download.pytorch.org/models/vgg19-dcbb9e9d.pth",
+  "download_source": "https://hf-mirror.com/molinamarc/syntheva/resolve/e98076431c59e6875c29bde7f19cc0c78b01b526/vgg19-dcbb9e9d.pth",
+  "source_sha256": "dcbb9e9dad569fff7a846263a77324fc34978fea2bfb039c012d710e1776ae44",
+  "sha256": "8698706a0bc01caf6c211d86e2f802331fe2374f9c5973fc4befcb782b2938e4",
+  "format": "torchvision.vgg19.features"
+}

@@ -1,0 +1,31 @@
+{
+  "seed": 42,
+  "slic": {
+    "n_segments": 64,
+    "compactness": 10.0,
+    "sigma": 1.0,
+    "color_space": "Lab"
+  },
+  "merge": {
+    "max_regions": 16,
+    "min_regions": 8,
+    "threshold": 0.35,
+    "min_area": 16,
+    "u": 0.6,
+    "v": 0.4,
+    "skip_boundary_gradient": false
+  },
+  "normalization": {
+    "max_color_diff": 100.0,
+    "max_gradient": 1.0
+  },
+  "edge_weight": {
+    "u_w": 0.5,
+    "v_w": 0.5,
+    "decay": 1.0
+  },
+  "masks": {
+    "sigma": 2.0,
+    "eps": 1e-08
+  }
+}

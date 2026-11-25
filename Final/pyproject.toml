@@ -1,0 +1,15 @@
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+exclude = ["resources/upstream", ".venv", "outputs"]
+cache-dir = "outputs/cache/ruff"
+
+[tool.ruff.lint]
+select = ["E", "F", "I"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+# Pytest's private Windows cache directories cannot be reused across the user's
+# account and Codex's sandbox account. These small tests do not need persistence.
+addopts = "-p no:cacheprovider --import-mode=importlib"
+markers = ["weights: requires the actual downloaded encoder and decoder", "ui: Streamlit interaction tests", "evaluator: requires verified ImageNet VGG19 evaluator weights"]

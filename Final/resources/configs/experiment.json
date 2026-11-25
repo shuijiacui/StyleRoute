@@ -1,0 +1,45 @@
+{
+  "comment": "Integrated v2: corrected regions and ReLU evaluator. New experiment version; historical results do not validate this configuration.",
+  "levels": [
+    0.3,
+    0.6,
+    0.9
+  ],
+  "budget": 40,
+  "max_restarts": 2,
+  "tolerance": 1e-09,
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "scoring": {
+    "delta": 0.001,
+    "delta_t": 1e-06,
+    "lam": 1.0,
+    "epsilon": 0.05,
+    "weights": "IMAGENET1K_V1",
+    "q_layer_index": 11,
+    "grad_smooth_kernel": 3,
+    "b_min": 0.1,
+    "b_max": 1.0,
+    "gram_normalisation": "c*h*w"
+  },
+  "global_scan_grid": [
+    0.3,
+    0.6,
+    0.9
+  ],
+  "methods": [
+    "risk",
+    "plain",
+    "random_states",
+    "global_scan"
+  ],
+  "region_representations": [
+    "content_adaptive"
+  ],
+  "version": "integrated-v2"
+}
